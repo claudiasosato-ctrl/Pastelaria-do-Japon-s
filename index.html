@@ -7,7 +7,6 @@
   <meta name="description" content="Pastéis crocantes e recheados na Praça José de Rezende Paiva, Varginha. Pedidos pelo WhatsApp!" />
   <meta name="theme-color" content="#ffefdb" />
   <link rel="stylesheet" href="style.css" />
-  <!-- Add a favicon and manifest as needed -->
   <link rel="icon" href="/favicon.ico" />
   <script type="application/ld+json">
   {
@@ -37,7 +36,15 @@
         <span class="logo-text">Pastelaria do Japonês</span>
       </a>
 
-      <nav class="nav" role="navigation" aria-label="Menu principal">
+      <button class="menu-toggle" aria-controls="primary-navigation" aria-expanded="false" aria-label="Abrir menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <path class="line top" d="M3 6h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path>
+          <path class="line middle" d="M3 12h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path>
+          <path class="line bottom" d="M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round" fill="none"></path>
+        </svg>
+      </button>
+
+      <nav id="primary-navigation" class="nav" role="navigation" aria-label="Menu principal">
         <ul class="nav-list">
           <li><a href="#sobre">Sobre</a></li>
           <li><a href="#cardapio">Cardápio</a></li>
@@ -137,5 +144,53 @@
       <p>© 2026 Pastelaria do Japonês - Varginha MG | Feito com <span aria-hidden="true">❤️</span> para pastéis crocantes</p>
     </div>
   </footer>
+
+  <script>
+    (function(){
+      var btn = document.querySelector('.menu-toggle');
+      var nav = document.getElementById('primary-navigation');
+
+      if(!btn || !nav) return;
+
+      btn.addEventListener('click', function(){
+        var isOpen = nav.classList.toggle('open');
+        btn.classList.toggle('open', isOpen);
+        btn.setAttribute('aria-expanded', String(isOpen));
+        if(isOpen){
+          btn.setAttribute('aria-label','Fechar menu');
+          // move focus to first link for accessibility
+          var firstLink = nav.querySelector('a');
+          if(firstLink) firstLink.focus();
+        } else {
+          btn.setAttribute('aria-label','Abrir menu');
+        }
+      });
+
+      // close menu when clicking outside the nav or toggle
+      document.addEventListener('click', function(e){
+        if(!nav.contains(e.target) && !btn.contains(e.target)){
+          if(nav.classList.contains('open')){
+            nav.classList.remove('open');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded','false');
+            btn.setAttribute('aria-label','Abrir menu');
+          }
+        }
+      });
+
+      // close menu with Escape key for accessibility
+      document.addEventListener('keydown', function(e){
+        if(e.key === 'Escape' || e.key === 'Esc'){
+          if(nav.classList.contains('open')){
+            nav.classList.remove('open');
+            btn.classList.remove('open');
+            btn.setAttribute('aria-expanded','false');
+            btn.setAttribute('aria-label','Abrir menu');
+            btn.focus();
+          }
+        }
+      });
+    })();
+  </script>
 </body>
 </html>
